@@ -1,0 +1,15 @@
+# Use the official Node.js 16 image as the base image
+FROM node:16
+LABEL authors="tirane"
+
+WORKDIR /app
+COPY package*.json ./
+
+# Install dependencies, including Express.js
+RUN npm install
+COPY . .
+
+RUN npm run build
+RUN npx update-browserslist-db@latest
+EXPOSE 3000
+CMD ["npm", "start"]
