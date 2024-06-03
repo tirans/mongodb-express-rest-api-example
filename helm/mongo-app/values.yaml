@@ -1,0 +1,36 @@
+replicaCount: 1
+
+image:
+  repository: mongo-app
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 3000
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  host: m3max.local
+  paths:
+    - path: /
+      pathType: Prefix
+      backend:
+        serviceName: mongo-app
+        servicePort: 3000
+
+mongodb:
+  image:
+    repository: mongodb-app
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    port: 5050
+  dumpPath: /Users/tirane/Public/local-volume
+  dumpStorage: 1Gi
+serviceAccount:
+  create: true
+autoscaling:
+  enabled: false

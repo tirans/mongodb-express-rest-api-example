@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "mongo-app.fullname" . }}-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: {{ include "mongo-app.fullname" . }}-job
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          # Import the provided db dump into the local DB
+          mongorestore --host mongodb-app --port 5050 /dump
+
+          # Make API/Https calls to create a new record and list all documents
+          curl -X POST -H "Content-Type: application/json" -d @/config/post_values.json http://mongo-app:3000/api/records
+          curl http://mongo-app:3000/api/records > output.csv
+
+          # Save the results into a CSV file
+          cat output.csv
+        volumeMounts:
+        - name: post-values
+          mountPath: /config
+        - name: dump
+          mountPath: /dump
+      volumes:
+      - name: post-values
+        configMap:
+          name: {{ include "mongo-app.fullname" . }}-post-values
+      - name: dump
+        persistentVolumeClaim:
+          claimName: {{ include "mongo-app.fullname" . }}-dump-pvc
+      restartPolicy: Never
+  backoffLimit: 4

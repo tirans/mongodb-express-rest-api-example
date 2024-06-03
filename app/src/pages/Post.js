@@ -50,7 +50,7 @@ export default function App() {
     }
 
     loadPost();
-  }, []);
+  }, [params.id]);
 
   return (
     <React.Fragment>
