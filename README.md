@@ -9,20 +9,15 @@ Then, set the Atlas URI connection parameter in `server/.env` to your Connection
 ```
 ATLAS_URI=mongodb+srv://<username>:<password>@sandbox.jadwj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
 ```
+2. Build
+   cd project root (mongodb-express-rest-api-example)
+   run "./build.sh"
+2. Install
+    we're installing ingress-nginx and the mongo-app helm charts.
+    cd helm folder 
+    helm install  my-ingress-nginx ingress-nginx/ingress-nginx --version 4.10.1 -f ingress-nginx-values.yaml
+    helm install mongo-app ./mongo-app -f ./mongo-app/values.yaml --debug
 
-2. Start the Express server:
-```
-cd server
-npm install
-npm run dev
-```
-
-3. Start the React app (in a new terminal window):
-```
-cd app
-npm install
-npm start
-```
 
 ## Disclaimer
 
