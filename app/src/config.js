@@ -1,1 +1,1 @@
-export const baseUrl = "http://mongodb-app:5050";
+export const baseUrl = "http://m3max.local/db";

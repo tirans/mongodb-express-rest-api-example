@@ -1,10 +1,13 @@
 #!/bin/bash
 
-# Set API base URL
-API_URL="http://localhost:5050"
+# Load environment variables from .env file
+export "$(grep -v '^#' .env | xargs)"
 
+# Restore the database using the connection string
+mongoimport --uri "$ATLAS_URI/sample_training"  --collection posts --type csv /dump/sample_training/posts.csv --fields _id,body,permalink,author,title,tags,comments,date
+#echo "Database restored successfully"
 echo "Creating a new record..."
-curl -X POST -H "Content-Type: application/json" -d "@post_values.json" $API_URL/posts
+curl -i -f -X POST -H "Content-Type: application/json" -d "@post_values.json" $API_URL/posts
 
 echo "Fetching all records..."
 response=$(curl -s $API_URL/posts)
