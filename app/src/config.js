@@ -1,1 +1,1 @@
-export const baseUrl = "http://m3max.local/db";
+export const baseUrl = "http://m3max.local";

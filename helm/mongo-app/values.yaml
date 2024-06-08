@@ -9,7 +9,7 @@ service:
   type: ClusterIP
   port: 3000
 
-mongoApp:
+mongoapp:
   replicaCount: 1
   image:
     repository: mongo-app
@@ -19,16 +19,17 @@ mongoApp:
     type: ClusterIP
     port: 3000
 
-
 mongodb:
   image:
     repository: mongodb-app
     tag: latest
     pullPolicy: IfNotPresent
   service:
+    type: ClusterIP
     port: 5050
   dumpPath: /Users/tirane/Public/local-volume
   dumpStorage: 1Gi
+
 ingress:
   enabled: true
   annotations:
@@ -37,14 +38,17 @@ ingress:
     nginx.ingress.kubernetes.io/cors-allow-origin: "*"
     nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
     nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization"
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "64k"
+    nginx.ingress.kubernetes.io/proxy-buffers-number: "4"
   host: m3max.local
   paths:
-    - path: /api
-      pathType: Prefix
+    - path: /
+      pathType: ImplementationSpecific
       backend:
         serviceName: mongo-app
         servicePort: 3000
-    - path: /db
+    - path: /posts
       pathType: Prefix
       backend:
         serviceName: mongodb-app
