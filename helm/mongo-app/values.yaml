@@ -5,6 +5,11 @@ image:
   tag: latest
   pullPolicy: IfNotPresent
 
+JobImage:
+  repository: mongodb-app
+  tag: latest
+  pullPolicy: IfNotPresent
+
 service:
   type: ClusterIP
   port: 3000

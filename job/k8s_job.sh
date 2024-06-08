@@ -30,3 +30,4 @@ map({
     .[] | [._id, .body, .permalink, .author, .title, .tags, .comments, .date] | @csv
 )' > output.csv
 echo "Script completed."
+sleep 360

@@ -7,5 +7,6 @@ spec:
     storage: {{ .Values.mongodb.dumpStorage }}
   accessModes:
     - ReadWriteOnce
+  storageClassName: hostpath
   hostPath:
     path: {{ .Values.mongodb.dumpPath }}

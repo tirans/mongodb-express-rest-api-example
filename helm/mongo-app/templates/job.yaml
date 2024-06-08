@@ -1,14 +1,18 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "mongo-app.fullname" . }}-job
+  name: patchdb-job
 spec:
   template:
     spec:
       containers:
-      - name: {{ include "mongo-app.fullname" . }}-job
-        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-        command: ["/bin/bash", "/app/k8s_job.sh"]
+      - name:  "patchdb-job"
+        image: "{{ .Values.JobImage.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command: ["/bin/bash", "/server/k8s_job.sh"]
+        envFrom:
+          - secretRef:
+              name: patchdb-env
         volumeMounts:
         - name: post-values
           mountPath: /config
